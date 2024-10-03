@@ -1,0 +1,103 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ToDoListApp {
+    static class Task {
+        int id;
+        String description;
+        boolean isCompleted;
+
+        Task(int id, String description) {
+            this.id = id;
+            this.description = description;
+            this.isCompleted = false;
+        }
+
+        @Override
+        public String toString() {
+            return id + ". " + description + " [Completed: " + isCompleted + "]";
+        }
+    }
+
+    private static ArrayList<Task> tasks = new ArrayList<>();
+    private static int taskCounter = 1;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\nTo-Do List Menu:");
+            System.out.println("1. Add Task");
+            System.out.println("2. Edit Task");
+            System.out.println("3. Delete Task");
+            System.out.println("4. Display Tasks");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+
+            int option = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (option) {
+                case 1:
+                    System.out.print("Enter task description: ");
+                    String description = scanner.nextLine();
+                    addTask(description);
+                    break;
+                case 2:
+                    System.out.print("Enter task ID to edit: ");
+                    int editId = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter new task description: ");
+                    String newDescription = scanner.nextLine();
+                    editTask(editId, newDescription);
+                    break;
+                case 3:
+                    System.out.print("Enter task ID to delete: ");
+                    int deleteId = scanner.nextInt();
+                    deleteTask(deleteId);
+                    break;
+                case 4:
+                    displayTasks();
+                    break;
+                case 5:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+        scanner.close();
+    }
+
+    private static void addTask(String description) {
+        tasks.add(new Task(taskCounter++, description));
+        System.out.println("Task added successfully.");
+    }
+
+    private static void editTask(int id, String newDescription) {
+        for (Task task : tasks) {
+            if (task.id == id) {
+                task.description = newDescription;
+                System.out.println("Task edited successfully.");
+                return;
+            }
+        }
+        System.out.println("Task not found.");
+    }
+
+    private static void deleteTask(int id) {
+        tasks.removeIf(task -> task.id == id);
+        System.out.println("Task deleted successfully.");
+    }
+
+    private static void displayTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            for (Task task : tasks) {
+                System.out.println(task);
+            }
+        }
+    }
+}
